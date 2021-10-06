@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create Post</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top" style="padding-bottom: 10px;background-color:grey">
+        <a class="navbar-brand" href="/"  style="font-family: cursive;font-weight: bold;font-size: 30px;">SayOne</a>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                   <a class="nav-link" href="accounts/profile/">Hello, {{user.username}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="accounts/logout/">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="accounts/profile/">Profile</a>
+                </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="accounts/login/">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="accounts/signup/">Register</a>
+              </li>
+            {% endif %}
+        </ul>
+      </nav>
+      <div class="container">
+        <h2>Stacked form</h2>
+        <form id="new_post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" placeholder="Title of your post" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea class="form-control" rows="5" id="content" name='content' placeholder="Write your post"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="font-family: cursive;">Submit</button>
+               <a  href="/"  style="font-family: cursive; padding-left: 10px">
+               <button type='button' class="btn btn-danger" >Cancel</button>
+          </a>
+        </form><br>
+
+      </div>
+
+      </body>
+      <script type='text/javascript'>
+
+          $(document).on('submit','#new_post',function(e){
+
+
+              $.ajax({
+                  type:'POST',
+                  url:'create/',
+                  data:{
+                      title:$('#title').val(),
+                      content:$('#content').val(),
+                      csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                  },
+                  success:function(){
+<!--                      alert('post created')-->
+                  }
+              });
+          });
+
+
+
+    document.getElementById("myButton").onclick = function () {
+    alert('hy')
+        location.href = "/;
+    };
+      </script>
+</html>

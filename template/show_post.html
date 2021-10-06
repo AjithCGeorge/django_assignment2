@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Document</title>
+</head>
+<body>
+    <a class="nav-link" href="/blogs/post/" style="padding-top:150px">
+        <button class="btn btn-info"  style="border-color:grey; width:500px">Create Post</button>
+    </a>
+ <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top" style="padding-bottom: 10px;">
+        <a class="navbar-brand" href="/"  style="font-family: cursive;font-weight: bold;font-size: 30px;">SayOne</a>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                   <a class="nav-link" href="accounts/profile/">Hello, {{user.username}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="accounts/logout/">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="accounts/profile/">Profile</a>
+                </li>
+
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="accounts/login/">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="accounts/signup/">Register</a>
+              </li>
+            {% endif %}
+        </ul>
+      </nav>
+{% csrf_token %}
+    {%for i in posts %}
+
+    <div class="container" style="padding-top:100px; padding-left:75px;width:60%" >
+            <h3 style=" border-bottom:1px solid black" align=left>{{i.title}}</h3>
+            <p style="padding-top:10px">{{i.content}}</p>
+            <button class='like  btn' id={{i.id}} value={{i.id}} style="border-color:grey"><i class="fa fa-thumbs-up"></i> {{i.likes.count}}</button>
+            <button class='dislike btn' id='dislike' value={{i.id}} style="border-color:grey"><i class="fa fa-thumbs-down"></i> {{i.dislikes.count}}</button>
+    </div>
+    {% endfor %}
+<br><br>
+</body>
+<script>
+    $(document).on('click','.like',function(e){
+<!--        e.preventDefault();-->
+
+        x=this.value;
+<!--        alert(x);-->
+
+
+
+        $.ajax({
+            type:'POST',
+            url: 'results/like/',
+            indexValue: x,
+            data : {
+                id:x,
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+
+                location.reload();
+
+            }
+
+        });
+
+    });
+    $(document).on('click','.dislike',function(e){
+<!--        e.preventDefault();-->
+
+        x=this.value;
+<!--        alert(x);-->
+
+
+
+        $.ajax({
+            type:'POST',
+            url: 'results/dislike/',
+            data : {
+                id:x,
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+                 location.reload();
+            }
+
+        });
+
+    });
+</script>
+
+
+</html>
